@@ -1,0 +1,147 @@
+@charset "utf-8";
+/* CSS Document */
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+img {
+    border: none 0;
+}
+
+body {
+    display: block;
+    min-height: 100%;
+    font-family: "Microsoft YaHei UI";
+}
+
+.warp {
+    width: 100%;
+    min-width: 1024px;
+    height: 100%;
+    position: fixed;
+    background-color:#d3e5ff;
+}
+
+.logo {
+    padding-top: 15px;
+    padding-left: 140px;
+    float: left;
+}
+
+.title {
+   
+    color: #4c4c4c;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 3%;
+    /*padding: 12px 20px 12px;*/
+   
+}
+
+.bg_box {
+    width: 100%;
+    height: 77%;
+    background: url('../images/Login/Background.png');
+    background-position: center;
+    background-size: cover;
+    display: table;
+}
+
+.login_box {
+    margin: 0 auto;
+    /*height: 580px;*/
+    /*width: 900px;*/
+}
+
+.signin {
+    width: 390px;
+    height: 390px;
+    background-size: contain;   
+    margin:0 auto;
+    margin-top: 70px;
+    background-image: url(../images/Login/Login2.png);
+    background-repeat: no-repeat;
+    z-index: 9999;
+    display: block;
+    overflow: hidden;
+}
+
+.form_signin {
+    max-width: 270px;
+    margin: 0 auto;
+    margin-top: 55px;
+    font-size: 16px;
+    font-family: "Microsoft YaHei UI";
+    color: #212121;
+    height: 40px;
+    width: 270px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 0;
+}
+
+.UserName {
+    font-size: 16px;
+    font-family: "Microsoft YaHei UI";
+    color: #212121;
+    height: 40px;
+   width:270px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 0;
+    padding-top: 4px;
+    margin-top: 50px;
+    background: url(../images/Login/Peolle.png) no-repeat;
+    background-size:cover;
+    padding-left: 60px;
+    border: none;
+}
+
+.Password {
+    font-size: 16px;
+    font-family: "Microsoft YaHei UI";
+    color: #212121;
+    height: 40px;
+   width:270px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    border-radius: 0;
+    padding-top: 7px;
+    margin-top: 30px;
+    background: url(../images/Login/PsWd.png) no-repeat;
+    background-size:cover;
+    padding-left: 60px;
+    border: none;
+}
+
+
+.form_submit {
+    margin-top: 50px;   
+    border: none;    
+    color: white;
+    text-align: center;
+    width: 270px;
+    font-size: 16px;
+    font-weight: bolder;
+    border-radius: 5px;
+    background-color: #3497d0;
+}
+
+.bottom_box{width: 100%;
+	        height: 50px;
+	        margin: 0 auto;
+	
+}
+
+.bottom{text-align:center;
+	    padding:10px 6px;
+        line-height: 25px;
+	    font-size: 12px;
+	    color: #4c4c4c;
+	
+} 

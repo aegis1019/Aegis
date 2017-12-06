@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.contact.dao.ContactDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.Contact">
+        <result column="CONTACT_ID" property="LinkManID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="ProjectName" jdbcType="VARCHAR" />
+        <result column="LIAISON" property="Name" jdbcType="VARCHAR" />
+        <result column="TITLE" property="Position" jdbcType="VARCHAR" />
+        <result column="RANK_GRP" property="Rank" jdbcType="VARCHAR" />
+        <result column="PHONE" property="Tel" jdbcType="VARCHAR" />
+        <result column="EMAIL" property="Email" jdbcType="VARCHAR" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+
+        <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="createDate" jdbcType="DECIMAL"/>
+        <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <select id="selectAllContactByRole" resultMap="BaseResultMap">
+        SELECT * FROM (
+        SELECT c.contact_id,c.project_id,p.project_name,c.title,c.rank_grp,c.phone,
+        c.liaison,c.email,c.remark,c.orgnization_id, ROWNUM RN FROM CONTACT c, sysprj p,
+        (select distinct role_id,project_id from roleprjmod) rpm
+        where rpm.role_id = #{roleId, jdbcType=VARCHAR }
+        and rpm.project_id = c.project_id
+        and p.project_id = rpm.project_id
+        <if test="name != null">
+            AND LIAISON = #{name, jdbcType=VARCHAR }
+        </if>
+        order by c.project_id,c.contact_id)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countAllContactByRole" resultType="java.lang.Integer">
+        SELECT count(*) FROM CONTACT c, sysprj p,
+        (select distinct role_id,project_id from roleprjmod) rpm
+        where rpm.role_id = #{roleId, jdbcType=VARCHAR }
+        and rpm.project_id = c.project_id
+        and p.project_id = rpm.project_id
+        <if test="name != null">
+            AND LIAISON = #{name, jdbcType=VARCHAR }
+        </if>
+    </select>
+
+    <insert id="insert">
+        insert into contact(contact_id,project_id,liaison,title,rank_grp,phone,email,remark)
+        values(
+        #{contact.LinkManID, jdbcType=VARCHAR },#{contact.ProjectID, jdbcType=VARCHAR },
+        #{contact.Name, jdbcType=VARCHAR },#{contact.Position, jdbcType=VARCHAR },
+        #{contact.Rank, jdbcType=VARCHAR },#{contact.Tel, jdbcType=VARCHAR },
+        #{contact.Email, jdbcType=VARCHAR },#{contact.Remark, jdbcType=VARCHAR }
+        )
+    </insert>
+
+    <update id="update">
+        update contact SET
+        project_id = #{contact.ProjectID, jdbcType=VARCHAR },
+        liaison = #{contact.Name, jdbcType=VARCHAR },
+        title = #{contact.Position, jdbcType=VARCHAR },
+        rank_grp = #{contact.Rank, jdbcType=VARCHAR },
+        phone = #{contact.Tel, jdbcType=VARCHAR },
+        email = #{contact.Email, jdbcType=VARCHAR },
+        remark = #{contact.Remark, jdbcType=VARCHAR }
+        where
+        contact_id = #{contact.LinkManID, jdbcType=VARCHAR }
+    </update>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from contact where contact_id = #{contactId, jdbcType=VARCHAR }
+    </select>
+
+    <delete id="deleteById">
+        delete from contact where  contact_id = #{contact.LinkManID, jdbcType=VARCHAR }
+    </delete>
+</mapper>

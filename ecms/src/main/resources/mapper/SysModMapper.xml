@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.auth.module.dao.SysModDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.SysMod">
+        <result column="PROJECT_ID" property="projectId" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="projectName" jdbcType="VARCHAR" />
+        <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+        <result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR" />
+        <result column="ITEM_URL" property="itemUrl" jdbcType="VARCHAR" />
+        <result column="ICON" property="icon" jdbcType="VARCHAR" />
+
+        <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="createDate" jdbcType="DECIMAL"/>
+        <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <select id="SelectShowMenuByRoleAndProject" resultMap="BaseResultMap">
+        select rpm.project_id ,p.project_name, m.module_id , m.module_name, m.item_url, m.icon
+        from roleprjmod rpm ,sysmod m ,sysprj p
+        where rpm.project_id = p.project_id
+        and rpm.module_id = m.module_id
+        and rpm.role_id = #{roleId, jdbcType=VARCHAR}
+        and p.project_id = #{projectId, jdbcType=VARCHAR}
+        order by module_id
+    </select>
+</mapper>

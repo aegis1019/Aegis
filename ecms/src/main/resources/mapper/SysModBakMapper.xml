@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.auth.module.dao.SysModBakDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.SysModBak">
+
+        <result column="MODULE_ID" property="moduleId" jdbcType="VARCHAR" />
+        <result column="MODULE_NAME" property="moduleName" jdbcType="VARCHAR" />
+        <result column="ITEM_URL" property="itemUrl" jdbcType="VARCHAR" />
+        <result column="ICON" property="icon" jdbcType="VARCHAR" />
+        <result column="IS_ROOT" property="isRoot" jdbcType="VARCHAR" />
+        <result column="IS_LEAF" property="isLeaf" jdbcType="VARCHAR" />
+        <result column="PARENT_ID" property="parentId" jdbcType="VARCHAR" />
+
+        <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="createDate" jdbcType="DECIMAL"/>
+        <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <select id="SelectModBakByRole" resultMap="BaseResultMap">
+        select mb.module_id,mb.module_name,mb.icon,mb.item_url,mb.parent_id,mb.is_root,mb.is_leaf
+        from sysrole r, sysmodbak mb, roleprjmodbak rpmb
+        where r.role_id = rpmb.role_id
+        and rpmb.module_id = mb.module_id
+        and r.role_id = #{roleId, jdbcType=VARCHAR}
+    </select>
+
+</mapper>

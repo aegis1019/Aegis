@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.fund.dao.BudgetMgrDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.BudgetMgr">
+        <result column="BUDGET_ID" property="DesignAlterationID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="ProjectName" jdbcType="VARCHAR" />
+        <result column="FEETYPE_ID" property="FeeType" jdbcType="VARCHAR" />
+        <result column="NAME" property="FeeName" jdbcType="VARCHAR" />
+        <result column="ESTIMATE" property="Estimate" jdbcType="DECIMAL" />
+        <result column="BUDGET" property="Budget" jdbcType="DECIMAL" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectAllBudgetByRole" resultMap="BaseResultMap">
+      SELECT * FROM (
+        select p.project_name, ft.name, bm.*, rownum RN
+          from budgetMGR bm,
+               feetype ft,
+               (select distinct project_id from roleprjmod where role_id = #{roleId,jdbcType=VARCHAR}) rpm,
+               sysprj p
+        where bm.project_id = rpm.project_id
+        and bm.feetype_id = ft.fee_type_id
+        and bm.project_id = p.project_id
+        <if test="feeType != null">
+            AND bm.feetype_id = #{feeType, jdbcType=VARCHAR }
+        </if>
+        <if test="projectId != null">
+            AND  bm.project_id = #{projectId, jdbcType=VARCHAR }
+        </if>
+        order by bm.project_id,bm.feetype_id)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countAllBudgetByRole" resultType="java.lang.Integer">
+        select count(*)
+        from budgetMGR bm,
+        feetype ft,
+        (select distinct project_id from roleprjmod where role_id = #{roleId,jdbcType=VARCHAR}) rpm,
+        sysprj p
+        where bm.project_id = rpm.project_id
+        and bm.feetype_id = ft.fee_type_id
+        and bm.project_id = p.project_id
+        <if test="feeType != null">
+            AND bm.feetype_id = #{feeType, jdbcType=VARCHAR }
+        </if>
+        <if test="projectId != null">
+            AND  bm.project_id = #{projectId, jdbcType=VARCHAR }
+        </if>
+        order by bm.project_id,bm.feetype_id
+    </select>
+
+    <insert id="insert">
+        insert into budgetMGR (BUDGET_ID,PROJECT_ID,FEETYPE_ID,ESTIMATE,BUDGET,REMARK)
+        VALUES
+        (
+          #{budget.DesignAlterationID,jdbcType=VARCHAR },#{budget.ProjectID,jdbcType=VARCHAR },
+          #{budget.FeeType,jdbcType=VARCHAR },#{budget.Estimate,jdbcType=DECIMAL },
+          #{budget.Budget,jdbcType=DECIMAL },#{budget.Remark,jdbcType=VARCHAR }
+        )
+    </insert>
+
+    <delete id="deleteById">
+        delete from budgetMGR where BUDGET_ID = #{budget.DesignAlterationID,jdbcType=VARCHAR }
+    </delete>
+
+    <update id="updateById">
+        update budgetMGR SET
+        PROJECT_ID = #{budget.ProjectID,jdbcType=VARCHAR },
+        FEETYPE_ID = #{budget.FeeType,jdbcType=VARCHAR },
+        ESTIMATE = #{budget.Estimate,jdbcType=DECIMAL },
+        BUDGET = #{budget.Budget,jdbcType=DECIMAL },
+        REMARK = #{budget.Remark,jdbcType=VARCHAR }
+        where BUDGET_ID = #{budget.DesignAlterationID,jdbcType=VARCHAR }
+    </update>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select p.project_name, ft.name, bm.*
+          from budgetMGR bm,
+               feetype ft,
+               (select distinct project_id from roleprjmod) rpm,
+               sysprj p
+        where bm.project_id = rpm.project_id
+        and bm.feetype_id = ft.fee_type_id
+        and bm.project_id = p.project_id
+        and budget_id = #{budget.DesignAlterationID,jdbcType=VARCHAR }
+    </select>
+
+</mapper>

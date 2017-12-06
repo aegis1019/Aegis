@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.projectPhase.dao.PrjPhaseDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.PrjPhase">
+        <result column="PHASE_ID" property="StageProjectID" jdbcType="VARCHAR" />
+        <result column="PHASE_NAME" property="Name" jdbcType="VARCHAR" />
+        <result column="PHASE_ORDER" property="Sort" jdbcType="DECIMAL" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+        <result column="CREATE_ID" property="createId" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="createDate" jdbcType="DECIMAL"/>
+        <result column="UPDATE_ID" property="updateId" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="updateDate" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <select id="selectAllPhaseByRole" resultMap="BaseResultMap">
+        SELECT * FROM (
+        select pp.*, rownum RN from prjphase pp
+        where 1=1
+        <if test="name != null">
+            AND PHASE_NAME = #{name, jdbcType=VARCHAR }
+        </if>
+        order by phase_order)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countAllPhaseByRole" resultType="java.lang.Integer">
+        select count(*) from prjphase pp where 1=1
+        <if test="name != null">
+            AND PHASE_NAME = #{name, jdbcType=VARCHAR }
+        </if>
+    </select>
+
+    <insert id="insert">
+        insert into prjphase (PHASE_ID,PHASE_NAME,PHASE_ORDER,REMARK)
+        VALUES
+        (#{phase.StageProjectID, jdbcType=VARCHAR },#{phase.Name, jdbcType=VARCHAR },
+         #{phase.Sort,jdbcType=DECIMAL},#{phase.Remark, jdbcType=VARCHAR})
+    </insert>
+
+    <delete id="delete">
+        delete from prjphase where PHASE_ID = #{phase.StageProjectID, jdbcType=VARCHAR}
+    </delete>
+
+    <update id="update">
+        update prjphase SET
+        PHASE_NAME = #{phase.Name, jdbcType=VARCHAR },
+        PHASE_ORDER = #{phase.Sort,jdbcType=DECIMAL},
+        REMARK = #{phase.Remark, jdbcType=VARCHAR}
+        where PHASE_ID = #{phase.StageProjectID}
+    </update>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from prjphase where PHASE_ID = #{phaseId, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectAllPhase"  resultMap="BaseResultMap">
+        select phase_id,phase_name from prjphase
+    </select>
+
+
+</mapper>

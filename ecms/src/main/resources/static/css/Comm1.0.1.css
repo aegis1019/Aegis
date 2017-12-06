@@ -1,0 +1,390 @@
+.FormBody1
+{
+    height:90%;
+    margin:0 auto;
+    font-size:9pt;
+    line-height:30px;
+}
+
+.FormBody2
+{
+    height:90%;
+    margin:0 auto;
+    font-size:9pt;
+    line-height:25px;
+}
+
+.PageBar
+{
+    margin-left:auto;
+    margin-right:2px;
+    /*width:380px;*/
+    background-color:#fafcfe;
+}
+
+.PageBar2
+{
+    margin-left:auto;
+    margin-right:2px;
+    width:400px;
+    background-color:#fafcfe;
+}
+
+.SearchBtnBar
+{
+    padding-right:5px;
+    padding-top:5px;
+    text-align:right;
+    border:none;
+    background-color:#fafcfe;
+}
+
+.FieldTitle
+{
+    text-align:right;
+}
+
+.Field
+{
+    text-align:left;
+    height:24px;
+}
+
+.selCls
+{
+    width: 148px;
+    border: #b5b8c8 solid 1px;
+}
+
+input.Field1
+{
+    font-size: 12px;
+    text-align: left;
+    width: 146px;
+    padding:1px;
+    border: #b5b8c8 solid 1px;
+}
+.cmbField1
+{
+    font-size: 12px;
+    text-align: left;
+    width: 150px;
+    padding:1px;
+    border: #b5b8c8 solid 1px;
+    height: 18px;
+}
+.BtnSeparator {
+    height: 24px;
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #fff;
+    margin: 3px 1px;
+}
+select.Field1 {
+    font-size: 12px;
+    text-align: left;
+    width: 150px;
+    padding:1px;
+    border: #b5b8c8 solid 1px;
+}
+.SearchArea { font-size:9pt; /*position:absolute;*/ left:0px; top:0px; right:0px; /*padding-top:5px; height:70px;*/ *height:60px;background-color:#fafcfe;}
+.GridBarArea { /*position:absolute;*/ left:0px; top:0px; right:0px; top:70px; height:30px;background-color:#fafcfe;border:none;}
+.PageBarArea { /*position:absolute;*/ left:0px; top:0px; right:0px; top:100px; height:30px;background-color:#f3f3f3;border:none;}
+.GridArea { /*position:absolute;*/ left:0px; top:130px; bottom:0px; right:0px;}
+.SearchArea table{
+    max-width:1200px;
+    padding-top:5px;
+    padding-bottom:5px;
+}
+.TreeBarArea { height:30px;width:480px;background-color:#fafcfe;border:none;}
+.TreeBarArea2 { height:30px;width:630px;background-color:#fafcfe;border:none;}
+.PageBarArea2 { height:30px;background-color:#fafcfe;border:none;}
+
+select.Field1 {
+    height:24px;
+}
+input.Field1{
+    height:22px;
+}
+select.selCls {
+    height:26px;
+}
+/* ============== EasyUI button ============== */
+.icon-btn-Pre {
+    background: url('../images/Button/Pre.png')  no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-Next {
+    background: url('../images/Button/Next.png')  no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-add {
+    background: url('../images/img/icon_4.png')  no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-edit{
+    background:url('../images/img/icon_6.png') no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-delete{
+    background:url('../images/img/icon_7.png') no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-detail{
+    background:url('../images/img/icon_8.png') no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-copy{
+    background:url('../images/img/icon_5.png') no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-save{
+    background:url('../images/img/save.png') no-repeat center center;
+}
+
+
+.icon-btn-empty{
+    background:url('../images/img/icon_3.png') no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-exit{
+    background:url('../images/img/exit.png') no-repeat center center;
+}
+
+.icon-btn-confirm{
+    background:url('../images/img/save.png') no-repeat center center;
+}
+
+.icon-btn-down {
+    background: url('../images/img/down.png')  no-repeat center center;
+    background-size:16px;
+}
+
+.icon-search{
+    background:url('../images/img/icon_1.png') no-repeat center center;
+    background-size:16px;
+}
+.icon-inside-apply{
+    background: url('../images/img/Apply.png') no-repeat center center;
+
+}
+.icon-inside-canel{
+    background: url('../images/img/CanelApply.png') no-repeat center center;
+
+}
+.icon-inside-refuse{
+    background: url('../images/img/Refuse.png') no-repeat center center;
+    background-size:16px;
+}
+
+.icon-btn-atta{
+    background:url('../images/img/doc.png') no-repeat center center;
+    background-size:16px;
+}
+/*EasyUI窗口样式*/
+
+.window{
+    /*-webkit-border-radius: initial;
+    border-radius: initial;*/
+    background: #f5f5f5;
+    padding: 0;
+    border: none;
+    border-top: #08669f solid 4px;
+}
+.window-header {
+    padding-left:20px!important;
+}
+.window .window-header{
+    border:none;
+    border-bottom: #dcdcdc solid 1px;
+    padding: 3px 0px 0px 0px;
+    background-color: #08669f;
+}
+.window .panel-header{
+    height: 20px;
+    padding-top: 5px;
+    background-color: #08669f;
+}
+.window .window-body ,.datagrid-wrap{
+    border: none;
+    /*border-bottom: #e3e2e2 solid 1px;
+    border-top: #e3e2e2 solid 1px;*/
+
+}
+
+.window .window-header .panel-tool {
+    right: 5px;
+    top:9px;
+    height:24px;
+}
+
+.window .window-header .panel-title{
+    font-family:'Microsoft YaHei';
+    font-weight:bold;
+    font-size:14px;
+    color:white;
+}
+
+.window-header .panel-tool-close{
+    width:20px;
+    height:20px;
+}
+.panel-tool-close{
+    background: url('../images/img/close.png') no-repeat center center;
+    background-size:12px;
+}
+.panel-tool .panel-tool-close:hover {
+    background: url('../images/img/close.png') no-repeat center center;
+    background-size:12px;
+    background-color:#e9e9e9;
+    -webkit-border-radius: 0 0 0 0;
+    -moz-border-radius: 0 0 0 0;
+    border-radius: 0px;
+}
+.panel-tool-close{
+    margin-top:2px;
+}
+.l-btn-plain:hover{
+    color:#2f77bc;
+}
+
+.l-btn-plain:hover {
+
+    -webkit-border-radius: 0 0 0 0;
+    -moz-border-radius: 0 0 0 0;
+    border-radius: 0px;
+
+    background-color:#dae6f0;
+    border-color:#dae6f0;
+}
+.GridBar .l-btn-plain{
+    height:28px;
+}
+.GridBar .l-btn-plain .l-btn-left{
+    margin-top:2px;
+}
+/*============== 模块背景样式 ==============*/
+
+
+
+
+.GridBarArea,.SearchArea,.PageBarArea,.GridArea{
+    min-width:1100px;
+}
+.GridBarArea{
+    background-color:#ecf1f5;
+}
+.SearchBtnBar,.SearchArea,.PageBarArea {
+    background-color:#fafcfe;
+}
+.PageBar {
+    background-color:#f3f3f3;
+}
+.GridBarArea{
+    width:100%;
+}
+.GridBar{
+    margin-left:10px;
+}
+.SearchBtnBar{
+
+    min-width:80px;
+}
+
+.SplitLine {
+    display: inline-block;
+    right: 10px;
+    width: 3px;
+    height: 26px;
+    background-image: url('../images/img/SplitLine.png');
+    background-position: right;
+    background-repeat: no-repeat;
+    vertical-align: middle;
+}
+.ContentArea{
+    width:98%;
+    text-align:center;
+    padding:10px;
+    overflow:auto;
+}
+.ShowArea{
+    width:98%;
+    overflow:auto;
+}
+
+.BtnArea {
+    padding-right:5px;
+    padding-top:5px;
+    text-align:right;
+    border:none;
+
+    width:100%;
+    background-color:#fafcfe;
+    padding-bottom:5px;
+}
+/*============== EasyUI输入控件 ==============*/
+
+.combo-arrow {
+    background: url('../images/img/ar.png') no-repeat center center;
+    background-color:#f0f0f0;
+}
+
+
+
+.textbox,.window .window-body {
+    -webkit-border-radius:0 0 0 0;
+    border-radius:0 0 0 0;
+}
+.textbox {
+    border: #b5b8c8 solid 1px;
+}
+
+.WdatePickerText {
+    width: 122px;
+    height:20px;
+    padding-right: 22px;
+    padding-left: 3px;
+}
+.WdatePickerText+image,.WdatePickerText+img{
+    width: 17px;
+    cursor: pointer;
+    padding-bottom: 4px;
+    right: 25px;
+    position: relative;
+}
+/*新*/
+.WdatePicker {
+    position: relative;
+    display: inline-block;
+}
+
+.WdatePicker input {
+    height: 24px;
+    padding-right:22px;
+    padding-left: 4px;
+    width: 122px;
+    *width:102px;
+}
+
+.WdatePicker img {
+    position: absolute;
+    right: 3px;
+    top: 4px;
+}
+tr{
+    height:27px;
+}
+
+.flag {
+    color: red;
+    font-size: 9px;
+    vertical-align: middle;
+    margin:0 3px;
+}

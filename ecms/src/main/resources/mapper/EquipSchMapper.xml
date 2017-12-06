@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.equipment.dao.EquipSchDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.EquipSch">
+        <result column="ID" property="EquipmentID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="EQUIP_NAME" property="EquipmentName" jdbcType="VARCHAR" />
+        <result column="WORK_DATE" property="CurrentTime" jdbcType="DECIMAL" />
+        <result column="PLANNED_NUM" property="EquipmentNumber" jdbcType="DECIMAL" />
+        <result column="ACTUAL_NUM" property="ActualNumber" jdbcType="DECIMAL" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectAllSchByRole" resultMap="BaseResultMap">
+        SELECT * FROM (
+        select t.*,ROWNUM RN from (
+        select * from equipschedule es
+        where project_id in
+        (select project_id from roleprjmod where role_id= #{roleId, jdbcType=VARCHAR })
+        <if test="EquipmentName != null">
+            and EQUIP_NAME = #{EquipmentName,jdbcType=VARCHAR}
+        </if>
+        order by work_date,project_id) t)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+
+    </select>
+
+    <select id="countAllSchByRole" resultType="java.lang.Integer">
+        select count(*)
+        from equipschedule es
+        where project_id in
+        (select project_id from roleprjmod where role_id= #{roleId, jdbcType=VARCHAR })
+        <if test="EquipmentName != null">
+            and EQUIP_NAME = #{EquipmentName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert">
+        insert into equipschedule(ID,PROJECT_ID,EQUIP_NAME,WORK_DATE,PLANNED_NUM,REMARK)
+        VALUES (
+        #{equip.EquipmentID,jdbcType=VARCHAR},#{equip.ProjectID,jdbcType=VARCHAR},#{equip.EquipmentName,jdbcType=VARCHAR},
+        #{equip.CurrentTime,jdbcType=DECIMAL},#{equip.EquipmentNumber,jdbcType=DECIMAL},#{equip.Remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteById">
+        delete from equipschedule where id = #{equip.EquipmentID,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from equipschedule where id = #{equipmentID,jdbcType=VARCHAR}
+    </select>
+
+    <update id="update">
+        update equipschedule SET
+        PROJECT_ID = #{equip.ProjectID,jdbcType=VARCHAR},EQUIP_NAME = #{equip.EquipmentName,jdbcType=VARCHAR},
+        WORK_DATE = #{equip.CurrentTime,jdbcType=DECIMAL}, PLANNED_NUM = #{equip.EquipmentNumber,jdbcType=DECIMAL},
+        REMARK = #{equip.Remark,jdbcType=VARCHAR}
+        WHERE ID = #{equip.EquipmentID,jdbcType=VARCHAR}
+    </update>
+
+</mapper>

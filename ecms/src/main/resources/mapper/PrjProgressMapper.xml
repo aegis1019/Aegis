@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.projectProgress.dao.PrjProgressDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.PrjProgress">
+        <result column="PROGRESS_ID" property="ProjectProgressID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="ProjectName" jdbcType="VARCHAR" />
+        <result column="PHASE_ID" property="StageProjectID" jdbcType="VARCHAR" />
+        <result column="PHASE_NAME" property="StageProjectName" jdbcType="VARCHAR" />
+        <result column="CHILD_STRUCTURE" property="ChildStructure" jdbcType="VARCHAR" />
+        <result column="PLAN_START" property="PlanStart" jdbcType="DECIMAL" />
+        <result column="PLAN_COMPLETE" property="PlanComplete" jdbcType="DECIMAL" />
+        <result column="ACTUAL_START" property="ActualStart" jdbcType="DECIMAL" />
+        <result column="ACTUAL_COMPLETE" property="ActualComplete" jdbcType="DECIMAL" />
+        <result column="COMPLETION" property="Completion" jdbcType="VARCHAR" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+        <result column="COMPLETE_RATE" property="CompleRate" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <select id="getAllProgressByRole" resultMap="BaseResultMap">
+        SELECT * FROM (
+          select rpm2.project_name, pp.phase_name, ps.*, pp.phase_order, rownum RN
+          FROM prjprogress ps,
+               prjphase pp,
+               (select distinct p.project_id, p.project_name
+                  from roleprjmod rpm, sysprj p
+                 where rpm.role_id = #{roleId, jdbcType=VARCHAR}
+                   and rpm.project_id = p.project_id) rpm2
+         where ps.phase_id = pp.phase_id
+           and rpm2.project_id = ps.project_id
+            <if test="ProjectID != null">
+                AND ps.project_id =#{ProjectID, jdbcType=VARCHAR }
+            </if>
+            <if test="StageProjectID != null">
+                AND ps.PHASE_ID =#{StageProjectID, jdbcType=VARCHAR }
+            </if>
+           order by ps.project_id , pp.phase_order)
+         WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countAllProgressByRole" resultType="java.lang.Integer">
+        select count(*)
+          FROM prjprogress ps,
+               prjphase pp,
+               (select distinct p.project_id, p.project_name
+                  from roleprjmod rpm, sysprj p
+                 where rpm.role_id = #{roleId, jdbcType=VARCHAR}
+                   and rpm.project_id = p.project_id) rpm2
+         where ps.phase_id = pp.phase_id
+           and rpm2.project_id = ps.project_id
+            <if test="ProjectID != null">
+                AND ps.project_id =#{ProjectID, jdbcType=VARCHAR }
+            </if>
+            <if test="StageProjectID != null">
+                AND ps.PHASE_ID =#{StageProjectID, jdbcType=VARCHAR }
+            </if>
+
+    </select>
+
+    <insert id="insert">
+        insert into prjprogress(PROGRESS_ID,PROJECT_ID,PHASE_ID,CHILD_STRUCTURE,
+        PLAN_START,PLAN_COMPLETE,ACTUAL_START,ACTUAL_COMPLETE,COMPLETION,REMARK,COMPLETE_RATE)
+        VALUES (
+        #{progress.ProjectProgressID, jdbcType=VARCHAR},#{progress.ProjectID, jdbcType=VARCHAR},
+        #{progress.StageProjectID, jdbcType=VARCHAR},#{progress.ChildStructure, jdbcType=VARCHAR},
+        #{progress.PlanStart, jdbcType=DECIMAL},#{progress.PlanComplete, jdbcType=DECIMAL},
+        #{progress.ActualStart, jdbcType=DECIMAL},#{progress.ActualComplete, jdbcType=DECIMAL},
+        #{progress.Completion, jdbcType=VARCHAR},#{progress.Remark, jdbcType=VARCHAR},
+        #{progress.CompleRate, jdbcType=DECIMAL}
+        )
+    </insert>
+
+    <delete id="delete">
+        delete from prjprogress where PROGRESS_ID = #{progress.ProjectProgressID, jdbcType=VARCHAR}
+    </delete>
+
+    <select id="getById" resultMap="BaseResultMap">
+        select p.project_name, pp.phase_name, ps.* from prjprogress ps, sysprj p, prjphase pp
+        where
+        ps.project_id = p.project_id
+        and ps.phase_id = pp.phase_id
+        and ps.PROGRESS_ID = #{ProjectProgressID, jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateById">
+        update prjprogress set
+        PROJECT_ID=#{progress.ProjectID,jdbcType=VARCHAR},COMPLETE_RATE=#{progress.CompleRate,jdbcType=DECIMAL},
+        PHASE_ID=#{progress.StageProjectID,jdbcType=VARCHAR},CHILD_STRUCTURE=#{progress.ChildStructure,jdbcType=VARCHAR},
+        PLAN_START=#{progress.PlanStart,jdbcType=DECIMAL},PLAN_COMPLETE=#{progress.PlanComplete,jdbcType=DECIMAL},
+        ACTUAL_START=#{progress.ActualStart,jdbcType=DECIMAL},ACTUAL_COMPLETE=#{progress.ActualComplete,jdbcType=DECIMAL},
+        COMPLETION=#{progress.Completion,jdbcType=VARCHAR},REMARK=#{progress.Remark,jdbcType=VARCHAR}
+        WHERE
+        PROGRESS_ID=#{progress.ProjectProgressID,jdbcType=VARCHAR}
+
+    </update>
+
+</mapper>

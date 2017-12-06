@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.staff.dao.StaffSchDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.StaffSch">
+        <result column="ID" property="DepartID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="DEPART_NAME" property="DepartName" jdbcType="VARCHAR" />
+        <result column="WORK_DATE" property="CurrentTime" jdbcType="DECIMAL" />
+        <result column="PLANNED_WORKERS" property="DepartNumber" jdbcType="DECIMAL" />
+        <result column="ACTUAL_WORKERS" property="ActualNumber" jdbcType="DECIMAL" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+
+    </resultMap>
+
+    <select id="selectAllSchByRole" resultMap="BaseResultMap">
+        SELECT * FROM (
+        select t.*,ROWNUM RN from (
+        select * from staffschedule ss
+        where project_id in
+        (select project_id from roleprjmod where role_id= #{roleId, jdbcType=VARCHAR })
+        <if test="DepartName != null">
+        and DEPART_NAME = #{DepartName,jdbcType=VARCHAR}
+        </if>
+        order by work_date,project_id) t)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+
+    </select>
+
+    <select id="countAllSchByRole" resultType="java.lang.Integer">
+        select count(*) from staffschedule ss
+        where project_id in
+        (select project_id from roleprjmod where role_id= #{roleId, jdbcType=VARCHAR })
+        <if test="DepartName != null">
+            and DEPART_NAME = #{DepartName,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert">
+        insert into staffschedule(ID,PROJECT_ID,DEPART_NAME,WORK_DATE,PLANNED_WORKERS,REMARK)
+        VALUES (
+        #{staff.DepartID,jdbcType=VARCHAR},#{staff.ProjectID,jdbcType=VARCHAR},#{staff.DepartName,jdbcType=VARCHAR},
+        #{staff.CurrentTime,jdbcType=DECIMAL},#{staff.DepartNumber,jdbcType=DECIMAL},#{staff.Remark,jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteById">
+        delete from staffschedule where id = #{staff.DepartID,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from staffschedule where id = #{departId,jdbcType=VARCHAR}
+    </select>
+
+    <update id="update">
+        update staffschedule SET
+        PROJECT_ID = #{staff.ProjectID,jdbcType=VARCHAR},DEPART_NAME = #{staff.DepartName,jdbcType=VARCHAR},
+        PLANNED_WORKERS = #{staff.DepartNumber,jdbcType=DECIMAL},
+        WORK_DATE = #{staff.CurrentTime,jdbcType=DECIMAL} ,REMARK = #{staff.Remark,jdbcType=VARCHAR}
+        WHERE ID = #{staff.DepartID,jdbcType=VARCHAR}
+    </update>
+
+
+</mapper>

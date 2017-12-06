@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.projectLog.dao.PrjLogDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.PrjLog">
+        <result column="LOG_ID" property="ATTACHMENTID" jdbcType="VARCHAR" />
+        <result column="FILE_PATH" property="FILEPATH" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="Type" jdbcType="VARCHAR" />
+        <result column="RECORD_DATE" property="RecordID" jdbcType="DECIMAL" />
+        <result column="RECORD_TYPE" property="status" jdbcType="DECIMAL" />
+        <result column="FILE_NAME" property="FILENAME" jdbcType="VARCHAR" />
+        <result column="FILE_TYPE" property="FILETYPE" jdbcType="VARCHAR" />
+        <result column="CREATE_ID" property="INPUTTERID" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="INPUTDATE" jdbcType="DECIMAL" />
+        <result column="CREATE_NAME" property="INPUTTERNAME" jdbcType="VARCHAR" />
+        <result column="UPDATE_ID" property="MODIFIERID" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="MODIFIERDATE" jdbcType="DECIMAL" />
+        <result column="UPDATE_NAME" property="MODIFIERNAME" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectRecent3LogByRole" resultMap="BaseResultMap">
+        select u.liaison as create_name, p.project_name, pl.*
+          from prjlog pl,
+               (select distinct project_id from roleprjmod where role_id = #{roleId,jdbcType=VARCHAR}) rpm,
+               sysprj p,
+               sysusr u
+         where pl.project_id = rpm.project_id
+           and pl.project_id = p.project_id
+           and u.user_id = pl.create_id
+           and pl.record_type = #{status,jdbcType=VARCHAR}
+           and pl.record_date in (to_char(sysdate,'yyyymmdd'),to_char(sysdate-1,'yyyymmdd'),to_char(sysdate-2,'yyyymmdd'))
+    </select>
+
+    <select id="countRecent3LogByRole" resultType="java.lang.Integer">
+        select count(*)
+          from prjlog pl,
+               (select distinct project_id from roleprjmod where role_id = #{roleId,jdbcType=VARCHAR}) rpm,
+               sysprj p,
+               sysusr u
+         where pl.project_id = rpm.project_id
+           and pl.project_id = p.project_id
+           and u.user_id = pl.create_id
+           and pl.record_type = #{status, jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select u.liaison as create_name, p.project_name, pl.*
+          from prjlog pl,
+               sysprj p,
+               sysusr u
+         where pl.project_id = p.project_id
+           and u.user_id = pl.create_id
+           and pl.log_id = #{logId, jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert">
+        insert into prjlog (LOG_ID,PROJECT_ID,RECORD_DATE,RECORD_TYPE,FILE_TYPE,FILE_NAME,FILE_PATH,CREATE_ID,CREATE_DATE,UPDATE_ID,UPDATE_DATE)
+        values(
+        #{prjlog.ATTACHMENTID, jdbcType=VARCHAR},#{prjlog.Type, jdbcType=VARCHAR},#{prjlog.RecordID, jdbcType=VARCHAR},
+        #{prjlog.status, jdbcType=VARCHAR},#{prjlog.FILETYPE, jdbcType=VARCHAR},#{prjlog.FILENAME, jdbcType=VARCHAR},
+        #{prjlog.FILEPATH, jdbcType=VARCHAR},#{prjlog.INPUTTERID, jdbcType=VARCHAR},to_number(to_char(sysdate,'yyyymmdd')),
+        #{prjlog.MODIFIERID, jdbcType=VARCHAR},#{prjlog.MODIFIERDATE, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <delete id="deleteById">
+        delete from prjlog where log_id = #{logId, jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

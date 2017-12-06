@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.rectification.dao.RectificationDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.Rectification">
+        <result column="RECTIFICATION_ID" property="RectificationID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="REC_NO" property="RectificationNo" jdbcType="VARCHAR" />
+        <result column="SUMMARY" property="Summary" jdbcType="VARCHAR" />
+        <result column="DOWN_DATE" property="InputDate" jdbcType="DECIMAL" />
+        <result column="SITUATION" property="Situation" jdbcType="VARCHAR" />
+        <result column="FEEDBACK_DATE" property="FeedbackTime" jdbcType="DECIMAL" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <select id="selectByRoleId" resultMap="BaseResultMap">
+        SELECT * FROM (
+        select t.*,ROWNUM RN from (select r.*
+          from rectification r,
+               (select distinct project_id from roleprjmod where role_id = '111') rpm
+         where r.project_id = rpm.project_id
+        <if test="RectificationNo != null">
+            and REC_NO = #{RectificationNo,jdbcType=VARCHAR}
+        </if>
+         order by r.project_id, r.down_date) t)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countByRoleId" resultType="java.lang.Integer">
+        select count(*)
+        from rectification r,
+        (select distinct project_id from roleprjmod where role_id = '111') rpm
+        where r.project_id = rpm.project_id
+        <if test="RectificationNo != null">
+            and REC_NO = #{RectificationNo,jdbcType=VARCHAR}
+        </if>
+    </select>
+
+    <insert id="insert">
+        insert into rectification(RECTIFICATION_ID,PROJECT_ID,REC_NO,SUMMARY,DOWN_DATE)
+        VALUES
+        (#{rec.RectificationID,jdbcType=VARCHAR},#{rec.ProjectID,jdbcType=VARCHAR},
+         #{rec.RectificationNo,jdbcType=VARCHAR},#{rec.Summary,jdbcType=VARCHAR},
+         to_number(to_char(sysdate,'yyyymmdd'))
+        )
+    </insert>
+
+    <delete id="deleteById">
+        delete from rectification where RECTIFICATION_ID = #{rec.RectificationID,jdbcType=VARCHAR}
+    </delete>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from rectification where RECTIFICATION_ID = #{rec.RectificationID,jdbcType=VARCHAR}
+    </select>
+
+    <update id="updateById">
+        update rectification SET
+        PROJECT_ID = #{rec.ProjectID,jdbcType=VARCHAR},
+        REC_NO = #{rec.RectificationNo,jdbcType=VARCHAR},
+        SUMMARY = #{rec.Summary,jdbcType=VARCHAR},
+        where
+        RECTIFICATION_ID = #{rec.RectificationID,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateHandleById">
+        update rectification SET
+        SITUATION = #{rec.Situation,jdbcType=VARCHAR},
+        FEEDBACK_DATE = #{rec.FeedbackTime,jdbcType=VARCHAR}
+        where
+        RECTIFICATION_ID = #{rec.RectificationID,jdbcType=VARCHAR}
+    </update>
+</mapper>

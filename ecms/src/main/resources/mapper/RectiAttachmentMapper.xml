@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.rectification.dao.RectiAttachDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.RectiAttachment">
+        <result column="ATTACHMENT_ID" property="ATTACHMENTID" jdbcType="VARCHAR" />
+        <result column="FILE_NAME" property="FILENAME" jdbcType="VARCHAR" />
+        <result column="CREATE_ID" property="INPUTTERID" jdbcType="VARCHAR" />
+        <result column="CREATE_NAME" property="INPUTTERNAME" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="INPUTDATE" jdbcType="DECIMAL" />
+        <result column="RECTIFICATION_ID" property="RecordID" jdbcType="VARCHAR" />
+        <result column="FILE_TYPE" property="FILETYPE" jdbcType="VARCHAR" />
+        <result column="FILE_PATH" property="FILEPATH" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insert">
+        insert into rectification_attachment (ATTACHMENT_ID,RECTIFICATION_ID,FILE_NAME,FILE_TYPE,FILE_PATH,CREATE_ID,CREATE_DATE)
+        VALUES
+        (#{attachment.ATTACHMENTID, jdbcType=VARCHAR},#{attachment.RecordID, jdbcType=VARCHAR},
+         #{attachment.FILENAME, jdbcType=VARCHAR},#{attachment.FILETYPE, jdbcType=VARCHAR},
+         #{attachment.FILEPATH, jdbcType=VARCHAR},#{attachment.INPUTTERID, jdbcType=VARCHAR},
+         to_number(to_char(sysdate,'yyyymmdd'))
+         )
+    </insert>
+
+    <select id="selectByRectiId" resultMap="BaseResultMap">
+        select u.user_name as create_name, ra.* from rectification_attachment ra, sysusr u
+        where ra.rectification_id = #{attachmentId, jdbcType=VARCHAR}
+        and ra.create_id = u.user_id
+    </select>
+
+    <select id="countByRectiId" resultType="java.lang.Integer">
+        select count(*) from rectification_attachment ra, sysusr u
+        where ra.rectification_id = #{attachmentId, jdbcType=VARCHAR}
+        and ra.create_id = u.user_id
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select * from rectification_attachment where attachment_id = #{attachmentId, jdbcType=VARCHAR}
+    </select>
+
+    <delete id="deleteById">
+        delete from rectification_attachment where attachment_id = #{attachmentId, jdbcType=VARCHAR}
+    </delete>
+
+</mapper>

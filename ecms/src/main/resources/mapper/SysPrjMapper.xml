@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.auth.project.dao.SysPrjDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.SysPrj">
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="PROJECT_NAME" property="Name" jdbcType="VARCHAR" />
+        <result column="ABBREVIATION" property="Abbreviation" jdbcType="VARCHAR" />
+        <result column="LOCATION" property="Location" jdbcType="VARCHAR" />
+        <result column="CONSIST" property="Consist" jdbcType="VARCHAR" />
+        <result column="COMPLETION_RATE" property="CompleRate" jdbcType="DECIMAL"/>
+        <result column="AREA_COVERED" property="CoversArea" jdbcType="DECIMAL"/>
+        <result column="AREA_OF_STRUCTURE" property="BuildArea" jdbcType="DECIMAL"/>
+        <result column="ABOVE_GROUND" property="AboveArea" jdbcType="DECIMAL"/>
+        <result column="BELOW_GROUND" property="UnderArea" jdbcType="DECIMAL"/>
+        <result column="TOTAL_FLOOR" property="TotalFloor" jdbcType="DECIMAL"/>
+        <result column="DESCRIPTION" property="Scale" jdbcType="VARCHAR" />
+
+        <result column="PROPRIETOR" property="Constructor" jdbcType="VARCHAR" />
+        <result column="PROPRIETOR_LEADER" property="ConstructorPerson" jdbcType="VARCHAR" />
+        <result column="PROPRIETOR_PHONE" property="ConstructorTel" jdbcType="VARCHAR" />
+        <result column="SUPERVISOR" property="Supervision" jdbcType="VARCHAR" />
+        <result column="SUPERVISOR_LEADER" property="SupervisionPerson" jdbcType="VARCHAR" />
+        <result column="SUPERVISOR_PHONE" property="SupervisionTel" jdbcType="VARCHAR" />
+        <result column="CONSTRUCTION" property="Contract" jdbcType="VARCHAR" />
+        <result column="CONSTRUCTION_LEADER" property="ContractPerson" jdbcType="VARCHAR" />
+        <result column="CONSTRUCTION_PHONE" property="ContractTel" jdbcType="VARCHAR" />
+        <result column="DESIGN" property="Design" jdbcType="VARCHAR" />
+        <result column="DESIGN_LEADER" property="DesignPerson" jdbcType="VARCHAR" />
+        <result column="DESIGN_PHONE" property="DesignTel" jdbcType="VARCHAR" />
+
+        <result column="BEGIN_DATE" property="PlanStart" jdbcType="DECIMAL"/>
+        <result column="END_DATE" property="PlanComplete" jdbcType="DECIMAL"/>
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+
+        <result column="CREATE_ID" property="CreateId" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="CreateDate" jdbcType="DECIMAL"/>
+        <result column="UPDATE_ID" property="UpdateId" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="UpdateDate" jdbcType="DECIMAL"/>
+
+        <result column="CODE" property="Code" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <select id="selectByRole" resultMap="BaseResultMap">
+        select distinct p.project_id,p.project_name,p.code
+        from roleprjmod rpm ,sysprj p
+        where rpm.role_id = #{user.roleId, jdbcType=VARCHAR }
+        and rpm.project_id = p.project_id
+        order by project_id
+    </select>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        /*select p.project_id, p.project_name*/
+        select *
+        from sysprj p
+        where p.project_id= #{projectId, jdbcType=VARCHAR }
+    </select>
+
+    <select id="selectAllProject" resultMap="BaseResultMap">
+        SELECT *
+        FROM (SELECT A.*, ROWNUM RN
+              FROM (SELECT * FROM SYSPRJ WHERE 1=1
+              <if test="code != null">
+                AND CODE = #{code, jdbcType=VARCHAR }
+              </if>
+              <if test="projectName != null">
+                AND PROJECT_NAME = #{projectName, jdbcType=VARCHAR }
+              </if>
+             ORDER BY PROJECT_ID )A)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countAllProject" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM SYSPRJ WHERE 1=1
+        <if test="code != null">
+            AND CODE = #{code, jdbcType=VARCHAR }
+        </if>
+        <if test="projectName != null">
+            AND PROJECT_NAME = #{projectName, jdbcType=VARCHAR }
+        </if>
+    </select>
+
+    <insert id="insertPrj">
+        insert into sysprj (project_id,code,project_name,abbreviation,location,consist,completion_rate,
+                            area_covered,area_of_structure,above_ground,below_ground,total_floor,
+                            description,proprietor,proprietor_leader,proprietor_phone,supervisor,
+                            supervisor_leader,supervisor_phone,construction,construction_leader,
+                            construction_phone,design,design_leader,design_phone,begin_date,end_date,
+                            remark,create_id,create_date,update_id,update_date)
+        VALUES (#{prj.ProjectID, jdbcType=VARCHAR },#{prj.Code, jdbcType=VARCHAR },#{prj.Name, jdbcType=VARCHAR },
+                #{prj.Abbreviation, jdbcType=VARCHAR },#{prj.Location, jdbcType=VARCHAR },
+                #{prj.Consist, jdbcType=VARCHAR },#{prj.CompleRate, jdbcType=DECIMAL },
+                #{prj.CoversArea, jdbcType=DECIMAL },#{prj.BuildArea, jdbcType=DECIMAL },
+                #{prj.AboveArea, jdbcType=DECIMAL },#{prj.UnderArea, jdbcType=DECIMAL },
+                #{prj.TotalFloor, jdbcType=DECIMAL },#{prj.Scale, jdbcType=VARCHAR },
+                #{prj.Constructor, jdbcType=VARCHAR },#{prj.ConstructorPerson, jdbcType=VARCHAR },#{prj.ConstructorTel, jdbcType=VARCHAR },
+                #{prj.Supervision, jdbcType=VARCHAR },#{prj.SupervisionPerson, jdbcType=VARCHAR },#{prj.SupervisionTel, jdbcType=VARCHAR },
+                #{prj.Contract, jdbcType=VARCHAR },#{prj.ContractPerson, jdbcType=VARCHAR },#{prj.ContractTel, jdbcType=VARCHAR },
+                #{prj.Design, jdbcType=VARCHAR },#{prj.DesignPerson, jdbcType=VARCHAR },#{prj.DesignTel, jdbcType=VARCHAR },
+                #{prj.PlanStart, jdbcType=DECIMAL },#{prj.PlanComplete, jdbcType=DECIMAL },
+                #{prj.Remark, jdbcType=VARCHAR },
+                #{prj.CreateId, jdbcType=VARCHAR },#{prj.CreateDate, jdbcType=DECIMAL },
+                #{prj.UpdateId, jdbcType=VARCHAR },#{prj.UpdateDate, jdbcType=DECIMAL })
+    </insert>
+
+    <delete id="deletePrjById">
+        delete from sysprj where project_id = #{prj.ProjectID, jdbcType=VARCHAR }
+    </delete>
+
+    <update id="updatePrjById">
+        update sysprj SET
+        project_id = #{prj.ProjectID,jdbcType=VARCHAR },code = #{prj.Code,jdbcType=VARCHAR },project_name = #{prj.Name,jdbcType=VARCHAR },
+        abbreviation = #{prj.Abbreviation,jdbcType=VARCHAR },location = #{prj.Location,jdbcType=VARCHAR },consist = #{prj.Consist,jdbcType=VARCHAR },
+        completion_rate = #{prj.CompleRate,jdbcType=DECIMAL },area_covered = #{prj.CoversArea,jdbcType=DECIMAL },area_of_structure = #{prj.BuildArea,jdbcType=DECIMAL },
+        above_ground = #{prj.AboveArea,jdbcType=DECIMAL },below_ground = #{prj.UnderArea,jdbcType=DECIMAL },total_floor = #{prj.TotalFloor,jdbcType=DECIMAL },
+        description = #{prj.Scale,jdbcType=VARCHAR },
+        proprietor = #{prj.Constructor,jdbcType=VARCHAR },proprietor_leader = #{prj.ConstructorPerson,jdbcType=VARCHAR },proprietor_phone = #{prj.ConstructorTel,jdbcType=VARCHAR },
+        supervisor = #{prj.Supervision,jdbcType=VARCHAR },supervisor_leader = #{prj.SupervisionPerson,jdbcType=VARCHAR },supervisor_phone = #{prj.SupervisionTel,jdbcType=VARCHAR },
+        construction = #{prj.Contract,jdbcType=VARCHAR },construction_leader = #{prj.ContractPerson,jdbcType=VARCHAR },construction_phone = #{prj.ContractTel,jdbcType=VARCHAR },
+        design = #{prj.Design,jdbcType=VARCHAR },design_leader = #{prj.DesignPerson,jdbcType=VARCHAR },design_phone = #{prj.DesignTel,jdbcType=VARCHAR },
+        begin_date = #{prj.PlanStart,jdbcType=DECIMAL },end_date = #{prj.PlanComplete,jdbcType=DECIMAL },remark = #{prj.Remark,jdbcType=VARCHAR },
+        create_id = #{prj.CreateId,jdbcType=VARCHAR },create_date = #{prj.CreateDate,jdbcType=DECIMAL },
+        update_id = #{prj.UpdateId,jdbcType=VARCHAR },update_date = #{prj.UpdateDate,jdbcType=DECIMAL }
+        where
+        code = #{prj.Code,jdbcType=VARCHAR }
+    </update>
+
+
+</mapper>
