@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.scene.dao.InspectionDao">
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.Inspection">
+        <result column="INSPECT_ID" property="InspectID" jdbcType="VARCHAR" />
+        <result column="SCENE_ID" property="SiteID" jdbcType="VARCHAR" />
+        <result column="PATROL_TIME" property="PatrolTime" jdbcType="VARCHAR" />
+        <result column="SITUATION" property="Situation" jdbcType="VARCHAR" />
+        <result column="INSPECT_TYPE" property="InspectType" jdbcType="VARCHAR" />
+        <result column="ATTACH_ID" property="AttachID" jdbcType="VARCHAR" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+        <result column="CREATE_ID" property="InputterID" jdbcType="VARCHAR" />
+        <result column="CREATE_NAME" property="InputterName" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="InputDate" jdbcType="DECIMAL" />
+        <result column="UPDATE_ID" property="ModifierID" jdbcType="VARCHAR" />
+        <result column="UPDATE_NAME" property="ModifierName" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="ModifyDate" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <insert id="insert">
+        insert into inspection (INSPECT_ID,SCENE_ID,PATROL_TIME,SITUATION,INSPECT_TYPE,
+                                 ATTACH_ID,REMARK,CREATE_ID,CREATE_DATE,UPDATE_ID,UPDATE_DATE)
+        values(
+            #{inspection.InspectID,jdbcType=VARCHAR},#{inspection.SiteID,jdbcType=VARCHAR},
+            #{inspection.PatrolTime,jdbcType=VARCHAR},#{inspection.Situation,jdbcType=VARCHAR},
+            #{inspection.InspectType,jdbcType=VARCHAR},#{inspection.AttachID,jdbcType=VARCHAR},
+            #{inspection.Remark,jdbcType=VARCHAR},
+            #{inspection.InputterID,jdbcType=VARCHAR},#{inspection.InputDate,jdbcType=DECIMAL},
+            #{inspection.ModifierID,jdbcType=VARCHAR},#{inspection.ModifyDate,jdbcType=DECIMAL}
+        )
+    </insert>
+
+</mapper>

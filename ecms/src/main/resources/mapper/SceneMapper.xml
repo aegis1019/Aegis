@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jtxx.scene.dao.SceneDao">
+
+    <resultMap id="BaseResultMap" type="com.jtxx.entity.Scene">
+        <result column="SCENE_ID" property="SiteID" jdbcType="VARCHAR" />
+        <result column="PROJECT_ID" property="ProjectID" jdbcType="VARCHAR" />
+        <result column="OWNER_NAME" property="OwnerName" jdbcType="VARCHAR" />
+        <result column="OWNER_PHONE" property="OwnerPhone" jdbcType="VARCHAR" />
+        <result column="OWNER_COMPANY" property="OwnerCompany" jdbcType="VARCHAR" />
+        <result column="CON_NAME" property="ConName" jdbcType="VARCHAR" />
+        <result column="CON_PHONE" property="ConPhone" jdbcType="VARCHAR" />
+        <result column="CON_COMPANY" property="ConCompany" jdbcType="VARCHAR" />
+        <result column="SUP_NAME" property="SupName" jdbcType="VARCHAR" />
+        <result column="SUP_PHONE" property="SupPhone" jdbcType="VARCHAR" />
+        <result column="SUP_COMPANY" property="SupCompany" jdbcType="VARCHAR" />
+        <result column="TODAY_DYNAMIC" property="ToDayDynamic" jdbcType="VARCHAR" />
+        <result column="CON_DYNAMIC" property="ConDynamic" jdbcType="VARCHAR" />
+        <result column="SUP_DYNAMIC" property="SupDynamic" jdbcType="VARCHAR" />
+        <result column="CURRENT_TIME" property="CurrentTime" jdbcType="DECIMAL" />
+        <result column="REMARK" property="Remark" jdbcType="VARCHAR" />
+        <result column="CREATE_ID" property="InputterID" jdbcType="VARCHAR" />
+        <result column="CREATE_NAME" property="InputterName" jdbcType="VARCHAR" />
+        <result column="CREATE_DATE" property="InputDate" jdbcType="DECIMAL" />
+        <result column="UPDATE_ID" property="ModifierID" jdbcType="VARCHAR" />
+        <result column="UPDATE_NAME" property="ModifierName" jdbcType="VARCHAR" />
+        <result column="UPDATE_DATE" property="ModifyDate" jdbcType="DECIMAL" />
+    </resultMap>
+
+    <insert id="insert">
+        insert into scene (SCENE_ID,PROJECT_ID,OWNER_NAME,OWNER_PHONE,OWNER_COMPANY,CON_NAME,CON_PHONE,CON_COMPANY,
+                            SUP_NAME,SUP_PHONE,SUP_COMPANY,TODAY_DYNAMIC,CON_DYNAMIC,SUP_DYNAMIC,CURRENT_TIME,REMARK,
+                            CREATE_ID,CREATE_DATE,UPDATE_ID,UPDATE_DATE)
+        values(
+               #{scene.SiteID,jdbcType=VARCHAR},#{scene.ProjectID,jdbcType=VARCHAR},
+               #{scene.OwnerName,jdbcType=VARCHAR},#{scene.OwnerPhone,jdbcType=VARCHAR},#{scene.OwnerCompany,jdbcType=VARCHAR},
+               #{scene.ConName,jdbcType=VARCHAR},#{scene.ConPhone,jdbcType=VARCHAR},#{scene.ConCompany,jdbcType=VARCHAR},
+               #{scene.SupName,jdbcType=VARCHAR},#{scene.SupPhone,jdbcType=VARCHAR},#{scene.SupCompany,jdbcType=VARCHAR},
+               #{scene.ToDayDynamic,jdbcType=VARCHAR},#{scene.ConDynamic,jdbcType=VARCHAR},#{scene.SupDynamic,jdbcType=VARCHAR},
+               #{scene.CurrentTime,jdbcType=DECIMAL},#{scene.Remark,jdbcType=VARCHAR},
+               #{scene.InputterName,jdbcType=VARCHAR},#{scene.InputDate,jdbcType=DECIMAL},
+               #{scene.ModifierName,jdbcType=VARCHAR},#{scene.ModifyDate,jdbcType=DECIMAL}
+               )
+    </insert>
+
+    <select id="selectByRole" resultMap="BaseResultMap">
+        SELECT * FROM (
+        select t.*,ROWNUM RN from (
+            select s.* from Scene s,(select distinct role_id,project_id from roleprjmod) rpm
+            where rpm.role_id = #{roleId, jdbcType=VARCHAR }
+              and s.project_id = rpm.project_id
+              <if test="OwnerName != null">
+              and s.OWNER_NAME = #{OwnerName,jdbcType=VARCHAR}
+              </if>
+              order by s.current_time,s.project_id
+              ) t)
+        WHERE RN BETWEEN 1 + (#{page}) * #{rows} AND (#{page} + 1) * #{rows}
+    </select>
+
+    <select id="countByRole" resultType="java.lang.Integer">
+        select count(*) from Scene s,(select distinct role_id,project_id from roleprjmod) rpm
+        where rpm.role_id = #{roleId, jdbcType=VARCHAR }
+         and s.project_id = rpm.project_id
+         <if test="OwnerName != null">
+         and s.OWNER_NAME = #{OwnerName,jdbcType=VARCHAR}
+         </if>
+    </select>
+
+
+</mapper>

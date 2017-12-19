@@ -16,7 +16,7 @@
         SELECT * FROM (
         select t.*,ROWNUM RN from (select r.*
           from rectification r,
-               (select distinct project_id from roleprjmod where role_id = '111') rpm
+               (select distinct project_id from roleprjmod where role_id = #{roleId, jdbcType=VARCHAR }) rpm
          where r.project_id = rpm.project_id
         <if test="RectificationNo != null">
             and REC_NO = #{RectificationNo,jdbcType=VARCHAR}
@@ -28,7 +28,7 @@
     <select id="countByRoleId" resultType="java.lang.Integer">
         select count(*)
         from rectification r,
-        (select distinct project_id from roleprjmod where role_id = '111') rpm
+        (select distinct project_id from roleprjmod where role_id = #{roleId, jdbcType=VARCHAR }) rpm
         where r.project_id = rpm.project_id
         <if test="RectificationNo != null">
             and REC_NO = #{RectificationNo,jdbcType=VARCHAR}
